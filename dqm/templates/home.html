@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+    Üdvözöllek az oldalon!
+{% endblock %}
+{% block content %}
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark" style="color:white">
+        <div class="col-md-5 p-lg-5 mx-auto my-5">
+            <h1 class="display-4 font-weight-normal">Hiflylabs DQM Management Eszköz</h1>
+            <p class="lead font-weight-normal">
+                A feladat során alkalmazott kutatás keretében a szövegelemzési módszereken alapuló automatikus
+                adattisztítási technikák, ill. adatbázis összekapcsolási módszerek vizsgálata történik.
+            </p>
+            <p>
+                A létező módszerek felkutatása és áttekintése mellett  kialakításra kerülnek a feladat megvalósításához
+                szükséges algoritmusok és implementációs  javaslatok. A feladat részét képezi az alkalmazható
+                referencia-adatbázisok összegyűjtése ill. azok  forrásadatokból történő előállítása, az ehhez
+                szükséges betöltési és adattisztítási eljárások előállítása.
+            </p>
+            <a class="btn btn-primary" href="{{ url_for('dqm_page') }}">Start</a>
+        </div>
+        <div class="product-device box-shadow d-none d-md-block"></div>
+        <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+    </div>
+{% endblock %}

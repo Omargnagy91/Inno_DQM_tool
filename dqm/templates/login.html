@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}
+    Login Page
+{% endblock %}
+{% block content %}
+    <body class="text-center">
+        <div class="container">
+            <form method="POST" class="form-signin" style="color:white">
+                {{ form.hidden_tag() }}
+                <img class="mb-4" src="{{url_for('static', filename='img/logo-white.png')}}" alt="hifly" width="40%" height="40%">
+                <h1 class="h3 mb-3 font-weight-normal">
+                    Bejelentkezés!
+                </h1>
+                <br>
+                Kérem adja meg a következő adatokat!
+                <p>{{ form.username(class="form-control", placeholder="Felhasználónév") }}</p>
+                <br>
+                {{ form.password(class="form-control", placeholder="Jelszó") }}
+
+                <br>
+
+
+                <div class="checkbox mb-3">
+                   <h6>Nincs még fiókja?</h6>
+                   <a class="btn btn-sm btn-secondary" href="{{ url_for('register_page') }}">Regisztráljon</a>
+                </div>
+
+                {{ form.submit(class="btn btn-lg btn-block btn-primary", value="Bejelentkezés") }}
+
+            </form>
+        </div>
+    </body>
+{% endblock %}

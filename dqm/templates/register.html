@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}
+    Register Page
+{% endblock %}
+{% block content %}
+    <body class="text-center">
+        <div class="container">
+            <form method="POST" class="form-register" style="color:white">
+                {{ form.hidden_tag() }}
+                <img class="mb-4" src="{{url_for('static', filename='img/logo-white.png')}}" alt="hifly" width="40%" height="40%">
+                <h1 class="h3 mb-3 font-weight-normal">
+                    Kérem regisztráljon új felhasználót!
+                </h1>
+                <br>
+
+                Felhasználónév:
+                {{ form.username(class="form-control", placeholder="Felhasználónév") }}
+
+                Email cím:
+                {{ form.email_address(class="form-control", placeholder="Email cím") }}
+
+                Jelszó:
+                {{ form.password1(class="form-control", placeholder="Jelszó") }}
+
+                Jelszó megerősítés:
+                {{ form.password2(class="form-control", placeholder="Jelszó megerősítése") }}
+
+                <br>
+
+                <div class="checkbox mb-3">
+                   <h6>Van már felhasználója?</h6>
+                   <a class="btn btn-sm btn-secondary" href="{{ url_for('login_page') }}">Bejelentkezés</a>
+                </div>
+
+                {{ form.submit(class="btn btn-lg btn-block btn-primary", value="Regisztráció") }}
+            </form>
+        </div>
+    </body>
+{% endblock %}
