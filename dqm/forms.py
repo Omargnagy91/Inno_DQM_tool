@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, FileField
-from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
+from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, InputRequired
 from dqm.models import User
 
 class RegisterForm(FlaskForm):
@@ -26,6 +26,13 @@ class LoginForm(FlaskForm):
     password = PasswordField(label="Password:", validators=[DataRequired()])
     submit = SubmitField(label='Sign in')
 
-class FileUpload(FlaskForm):
+class FileBrowser(FlaskForm):
     input_file = FileField(label="Fájl Neve...")
     submit = SubmitField(label="Feltöltés")
+
+class FileUpload(FlaskForm):
+    name = StringField([InputRequired()], render_kw={"placeholder": "Adatforrás azonosítója"})
+    submit = SubmitField(label="Feltöltés")
+
+class NoAction(FlaskForm):
+    submit = SubmitField(label="Törlés")

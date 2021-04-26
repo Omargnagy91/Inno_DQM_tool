@@ -78,21 +78,21 @@ def get_summary(df: pd.DataFrame):
     df_tmp = [str(round(df.shape[1], 0)),
               str(df.shape[0]),
               str(round(uni_row, 0)),
-              str(round(uni_row / df.shape[0], 3)),
+              str(round(uni_row / df.shape[0]*100, 3))+'%',
               str(round(comp_cnt, 0)),
-              str(round(comp_pct, 3)),
+              str(round(comp_pct*100, 3))+'%',
               str(round(df.shape[0] - comp_cnt, 0)),
-              str(round(1 - comp_pct, 3))]
+              str(round((1 - comp_pct)*100, 3))+'%']
 
-    df_data = {'Feature': ['Number of variables',
-                           'Number of rows',
-                           'Number of unique rows',
-                           'Rate of unique rows',
-                           'Number of complete rows',
-                           'Rate of complete rows',
-                           'Number of missing rows',
-                           'Rate of missing rows'],
-               'Value': df_tmp}
+    df_data = {'Tulajdonság': ['Oszlopok száma',
+                           'Sorok száma',
+                           'Egyedi sorok száma',
+                           'Egyedi sorok aránya',
+                           'Kitöltött sorok száma',
+                           'Kitöltött sorok aránya',
+                           'Hiányzó sorok száma',
+                           'Hiányzó sorok aránya'],
+               'Érték': df_tmp}
     df_data = pd.DataFrame(df_data)
     return df_data
 

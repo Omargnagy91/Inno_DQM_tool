@@ -12,19 +12,26 @@
     }
     #content-left-second {
         margin-top: 5vh;
+        margin-right: 2vh;
         text-align: center;
         text-decoration: underline
     }
     h4 {
         text-align:center;
         margin-bottom: 5%;
-        text-decoration: underline
+        text-decoration: underline;
+
     }
 
     .form-inline{
     margin: 0 auto;
     width:55%
     }
+
+    th {
+        text-align:center
+    }
+
     </style>
 
     <div class="row" style="margin-left:20px; margin-top:20px">
@@ -33,15 +40,28 @@
                 <h4>1: Válasszon adatforrást!</h4>
                <span>
                     <form class="form-inline" action="/dqm" method="POST" enctype="multipart/form-data">
-                        {{ form.hidden_tag() }}
+                        {{ form_browser.hidden_tag() }}
                         <div class="input-group">
-                            {{ form.input_file(id="my-file-selector", class="form-control") }}
+                            {{ form_browser.input_file(id="my-file-selector", class="form-control") }}
                         </div>
-                        {{ form.submit(class_="btn btn-success") }}
+                        {{ form_browser.submit(class="btn btn-success") }}
                     </form>
                </span>
                <div id="content-left-second">
-                   <h5>Adatforrás tulajdonságai</h5>
+                   {% if eda is defined %}
+                       <h5>Adatforrás tulajdonságai</h5>
+                       {% for table in eda %}
+                         {{ table|safe }}
+                       {% endfor %}
+                       <form class="form-group" action="/dqm" method="POST" enctype="multipart/form-data">
+                            {{ form_upload.hidden_tag() }}
+                            {{ form_upload.name(class="form-control") }}
+                            {{ form_upload.submit(class= "btn btn-success btn-block") }}
+                       </form>
+                       <form class="form-group" action="/dqm" method="POST" enctype="multipart/form-data">
+                            {{ form_no_action.submit(class= "btn btn-danger btn-block") }}
+                        </form>
+                   {% endif %}
                </div>
            </div>
         </div>

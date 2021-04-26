@@ -1,7 +1,7 @@
 from dqm import app
 from flask import render_template, redirect, url_for, flash, request
 from dqm.models import User
-from dqm.forms import RegisterForm, LoginForm, FileUpload
+from dqm.forms import RegisterForm, LoginForm, FileBrowser, FileUpload, NoAction
 from dqm import db
 from flask_login import login_user, logout_user, login_required, current_user
 import pandas as pd
@@ -15,16 +15,33 @@ def home_page():
 @app.route('/dqm', methods=['GET', 'POST'])
 @login_required
 def dqm_page():
-    form = FileUpload()
-    if request.method == 'POST' and form.validate_on_submit():
-        df = pd.read_csv(form.input_file.data, sep=";", encoding='latin-1')
+    form_browser = FileBrowser()
+    form_upload = FileUpload()
+    form_no_action = NoAction()
+
+    if request.method == 'POST' and form_browser.validate_on_submit():
+        df = pd.read_csv(form_browser.input_file.data, sep=";", encoding='latin-1')
 
         # get statistics from dataframe
         df_stat = get_summary(df)
         print(df_stat)
+        return render_template('dqm.html',
+                               form_browser=form_browser,
+                               form_upload=form_upload,
+                               form_no_action=form_no_action,
+                               eda=[df_stat.to_html(classes='table table-hover table-dark text-center',
+                                                    header=True)])
 
+    elif request.method == 'POST' and form_upload.validate_on_submit():
+        return render_template('dqm.html',
+                               form_browser=form_browser)
 
-    return render_template('dqm.html', form=form)
+    elif request.method == 'POST' and form_no_action.validate_on_submit():
+        return render_template('dqm.html',
+                               form_browser=form_browser)
+    else:
+        return render_template('dqm.html',
+                               form_browser=form_browser)
 
 
 @app.route('/register', methods=['POST', 'GET'])
