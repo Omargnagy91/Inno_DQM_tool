@@ -1,13 +1,60 @@
 {% extends 'base.html' %}
 {% block title %}
-    Market Page
+    DQM main tool
 {% endblock %}
 
 {% block content %}
-    <div class="row" style="margin:20px">
-        <div class="col-12">
-           Ez a kezdőlapja a Data Quality Management eszköznek!
+
+    <style>
+    .content-left, .content-middle {
+        border-right: 1px solid white;
+        height: 95vh;
+    }
+    #content-left-second {
+        margin-top: 5vh;
+        text-align: center;
+        text-decoration: underline
+    }
+    h4 {
+        text-align:center;
+        margin-bottom: 5%;
+        text-decoration: underline
+    }
+
+    .form-inline{
+    margin: 0 auto;
+    width:55%
+    }
+    </style>
+
+    <div class="row" style="margin-left:20px; margin-top:20px">
+        <div class="col-5 text-center">
+           <div class="content-left">
+                <h4>1: Válasszon adatforrást!</h4>
+               <span>
+                    <form class="form-inline" action="/dqm" method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="input-group">
+                            {{ form.input_file(id="my-file-selector", class="form-control") }}
+                        </div>
+                        {{ form.submit(class_="btn btn-success") }}
+                    </form>
+               </span>
+               <div id="content-left-second">
+                   <h5>Adatforrás tulajdonságai</h5>
+               </div>
+           </div>
+        </div>
+        <div class="col-4">
+            <div class="content-middle">
+               <h4>2: Importált adatforrások</h4>
+           </div>
+        </div>
+        <div class="col-3">
+            <div class="content-right">
+               <h4>3: Műveletek</h4>
+           </div>
         </div>
     </div>
-
 {% endblock %}
+

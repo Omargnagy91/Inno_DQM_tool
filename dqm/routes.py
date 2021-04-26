@@ -1,18 +1,30 @@
 from dqm import app
 from flask import render_template, redirect, url_for, flash, request
 from dqm.models import User
-from dqm.forms import RegisterForm, LoginForm
+from dqm.forms import RegisterForm, LoginForm, FileUpload
 from dqm import db
 from flask_login import login_user, logout_user, login_required, current_user
+import pandas as pd
+from .function import get_summary
+
 @app.route('/')
 @app.route('/home')
 def home_page():
     return render_template('home.html')
 
-@app.route('/dqm')
+@app.route('/dqm', methods=['GET', 'POST'])
 @login_required
 def dqm_page():
-    return render_template('dqm.html')
+    form = FileUpload()
+    if request.method == 'POST' and form.validate_on_submit():
+        df = pd.read_csv(form.input_file.data, sep=";", encoding='latin-1')
+
+        # get statistics from dataframe
+        df_stat = get_summary(df)
+        print(df_stat)
+
+
+    return render_template('dqm.html', form=form)
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -52,3 +64,4 @@ def logout_page():
     logout_user()
     flash("You have been logged out!", category='info')
     return redirect(url_for('home_page'))
+
