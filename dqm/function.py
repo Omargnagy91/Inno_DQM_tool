@@ -4,36 +4,39 @@ import numpy as np
 def get_datetime_cols(df:pd.DataFrame):
     df_time_cols = []
     for i in range(0, len(df.columns)):
-        print("--------------")
-        print(str(i + 1) + "/" + str(len(df.columns)) + " " + df.columns[i])
+        # print("--------------")
+        # print(str(i + 1) + "/" + str(len(df.columns)) + " " + df.columns[i])
 
         try:
             tmp_val = df[df.columns[i]].first_valid_index()
 
             try:
                 if (type(int(df[df.columns[i]][tmp_val])) in [int, float]):
-                    print("Szám formátum")
+                    pass
+                    # print("Szám formátum")
 
             except:
                 tmp_val_len = len(str(df[df.columns[i]][tmp_val]))
-                print("Nem szám formátum")
+                # print("Nem szám formátum")
                 if (tmp_val_len > 5):
                     df[df.columns[i]] = pd.to_datetime(df[df.columns[i]])
                     df_time_cols.append(df.columns[i])
-                    print("Datetimera konvertálva")
+                    # print("Datetimera konvertálva")
                 else:
-                    print("Nem konvertálható Datetimera")
+                    pass
+                    # print("Nem konvertálható Datetimera")
 
                 if (tmp_val_len < 12):
                     df[df.columns[i]] = df[df.columns[i]].dt.date
-                    print("Dátummá alakítva")
-                print("Konvertálva: " + str(df[df.columns[i]][tmp_val]))
+                    # print("Dátummá alakítva")
+                # print("Konvertálva: " + str(df[df.columns[i]][tmp_val]))
 
         except:
             if df.columns[i] in df_time_cols:
                 pass
             else:
-                print("Szöveges mező")
+                pass
+                # print("Szöveges mező")
 
     return df, df_time_cols
 

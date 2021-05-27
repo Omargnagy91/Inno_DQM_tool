@@ -44,7 +44,8 @@
                         <div class="input-group">
                             {{ form_browser.input_file(id="my-file-selector", class="form-control") }}
                         </div>
-                        {{ form_browser.submit(class="btn btn-success") }}
+                        <input id="file_browser" name="file_browser" hidden=True value="Feltöltés">
+                        {{ form_browser.submit(class="btn btn-info" ) }}
                     </form>
                </span>
                <div id="content-left-second">
@@ -56,10 +57,12 @@
                        <form class="form-group" action="/dqm" method="POST" enctype="multipart/form-data">
                             {{ form_upload.hidden_tag() }}
                             {{ form_upload.name(class="form-control") }}
-                            {{ form_upload.submit(class= "btn btn-success btn-block") }}
+                            <input id="file_upload" name="file_upload" hidden=True value="Feltöltés">
+                            {{ form_upload.submit(class="btn btn-success btn-block") }}
                        </form>
                        <form class="form-group" action="/dqm" method="POST" enctype="multipart/form-data">
-                            {{ form_no_action.submit(class= "btn btn-danger btn-block") }}
+                           <input id="file_no_action" name="file_no_action" hidden=True value="NoACtion">
+                           {{ form_no_action.submit(class="btn btn-danger btn-block") }}
                         </form>
                    {% endif %}
                </div>

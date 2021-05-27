@@ -27,3 +27,16 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f'User  {self.username}'
+
+class MetaData(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(), unique=True, nullable=False)
+    column_num = db.Column(db.Integer(), nullable=False)
+    row_num = db.Column(db.Integer(), nullable=False)
+    unique_row_num = db.Column(db.Integer(), nullable=False)
+    unique_row_rate = db.Column(db.String(), nullable=False)
+    filled_row_num = db.Column(db.Integer(), nullable=False)
+    filled_row_rate = db.Column(db.String(), nullable=False)
+    missing_row_num = db.Column(db.Integer(), nullable=False)
+    missing_row_rate = db.Column(db.String(), nullable=False)
+
