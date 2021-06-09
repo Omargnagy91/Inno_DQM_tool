@@ -1,5 +1,15 @@
+from dqm.models import MetaData
 import pandas as pd
 import numpy as np
+
+
+def get_data_sources_name():
+    sources = MetaData.query.all()
+    sources_name = []
+    for value in sources:
+        sources_name.append((value, value))
+
+    return sources_name
 
 def get_datetime_cols(df:pd.DataFrame):
     df_time_cols = []
@@ -43,9 +53,7 @@ def get_datetime_cols(df:pd.DataFrame):
 def get_numeric_cols(df:pd.DataFrame, df_time_cols):
     num_types = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
     df_num_cols = df.select_dtypes(include=num_types).columns
-    print(df_num_cols)
     df_num_cols = list(set(df_num_cols) - set(df_time_cols))
-    # df_num = df[df_num_cols]
     return df_num_cols
 
 def get_character_cols(df: pd.DataFrame):

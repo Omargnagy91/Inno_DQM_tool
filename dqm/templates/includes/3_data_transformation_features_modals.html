@@ -1,0 +1,38 @@
+<style>
+  .modal-content{
+    background-color:#212121
+  }
+</style>
+
+<div class="modal fade" id="Modal-Remove-DataSet"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="col-12 modal-title text-center" id="ModalLabel">
+            Adatforrás eltávolítás
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {{ remove_data_set.hidden_tag() }}
+            <h6 class="text-center">
+              Válassza ki, hogy melyik forrást szeretné törölni az adatbázisból!
+            </h6>
+            <br>
+            {{ remove_data_set.select_data(class="form-control")}}
+            <br>
+            <input id="remove_data_set" name="remove_data_set" type="hidden" value="remove_data_set">
+            {{ remove_data_set.submit(class="btn btn-outline-danger btn-block") }}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+</div>

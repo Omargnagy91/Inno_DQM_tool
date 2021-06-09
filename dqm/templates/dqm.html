@@ -10,12 +10,14 @@
         border-right: 1px solid white;
         height: 95vh;
     }
+
     #content-left-second {
         margin-top: 5vh;
         margin-right: 2vh;
         text-align: center;
         text-decoration: underline
     }
+
     h4 {
         text-align:center;
         margin-bottom: 5%;
@@ -71,13 +73,62 @@
         <div class="col-4">
             <div class="content-middle">
                <h4>2: Importált adatforrások</h4>
-           </div>
+                <div class="row" style="margin-right:20px">
+                {% for data_set in data_sets %}
+                {% include 'includes/2_data_set_info_modals.html' %}
+                        <div class="col-md-6">
+                            <div style="margin-bottom: 5px;" class="card text-center bg-dark">
+                                 <div class="card-body">
+                                     <h5 class="card-title">{{ data_set.name }}</h5>
+                                     <button type="button" class="btn btn-outline-info" style="margin-bottom: 5px"
+                                             data-toggle="modal" data-target="#Modal-DataSet-{{ data_set.id }}">
+                                         Részletek
+                                     </button>
+                                     <p class="card-text"><strong> Az adatforrás {{ data_set.row_num }} sort tartalmaz</strong></p>
+                                 </div>
+                            </div>
+                        </div>
+                {% endfor %}
+                </div>
+            </div>
         </div>
         <div class="col-3">
             <div class="content-right">
                <h4>3: Műveletek</h4>
+               <div class="row" style="margin-right:20px">
+                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
+                            data-toggle="modal" data-target="#">
+                        Adatforrások összekapcsolása
+                    </button>
+                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
+                            data-toggle="modal" data-target="#">
+                        Duplum szűrés
+                    </button>
+                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
+                            data-toggle="modal" data-target="#">
+                        Szöveges mező transzformáció
+                    </button>
+                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
+                            data-toggle="modal" data-target="#">
+                        Dátum mező transzformáció
+                    </button>
+                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
+                            data-toggle="modal" data-target="#">
+                        Szöveg tisztítás
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-block" style="margin-bottom: 5px"
+                            data-toggle="modal" data-target="#Modal-Remove-DataSet">
+                        Adatforrás eltávolítás
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-block" style="margin-bottom: 5px"
+                            data-toggle="modal" data-target="#">
+                        Adatforrás mező eltávolítás
+                    </button>
+               </div>
            </div>
         </div>
     </div>
+
+{% include 'includes/3_data_transformation_features_modals.html' %}
 {% endblock %}
 

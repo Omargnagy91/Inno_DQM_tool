@@ -1,0 +1,78 @@
+<style>
+  .modal-content{
+    background-color:#212121
+  }
+</style>
+
+<div class="modal fade" id="Modal-DataSet-{{ data_set.id }}"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="col-12 modal-title text-center" id="ModalLabel">
+            {{ data_set.name }}
+          </h5>
+        </div>
+        <div class="modal-body">
+          <table border="1" class="dataframe table table-hover table-dark text-center">
+             <thead>
+                <tr style="text-align: right;">
+                   <th></th>
+                   <th>Tulajdonság</th>
+                   <th>Érték</th>
+                </tr>
+             </thead>
+             <tbody>
+                <tr>
+                   <th>0</th>
+                   <td>Oszlopok száma</td>
+                   <td>{{ data_set.column_num }}</td>
+                </tr>
+                <tr>
+                   <th>1</th>
+                   <td>Sorok száma</td>
+                   <td>{{ data_set.row_num }}</td>
+                </tr>
+                <tr>
+                   <th>2</th>
+                   <td>Egyedi sorok száma</td>
+                   <td>{{ data_set.unique_row_num }}</td>
+                </tr>
+                <tr>
+                   <th>3</th>
+                   <td>Egyedi sorok aránya</td>
+                   <td>{{ data_set.unique_row_rate }}</td>
+                </tr>
+                <tr>
+                   <th>4</th>
+                   <td>Kitöltött sorok száma</td>
+                   <td>{{ data_set.filled_row_num }}</td>
+                </tr>
+                <tr>
+                   <th>5</th>
+                   <td>Kitöltött sorok aránya</td>
+                   <td>{{ data_set.filled_row_rate }}</td>
+                </tr>
+                <tr>
+                   <th>6</th>
+                   <td>Hiányzó sorok száma</td>
+                   <td>{{ data_set.missing_row_num }}</td>
+                </tr>
+                <tr>
+                   <th>7</th>
+                   <td>Hiányzó sorok aránya</td>
+                   <td>{{ data_set.missing_row_rate }}</td>
+                </tr>
+             </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-dismiss="modal">
+            Vissza
+          </button>
+        </div>
+      </div>
+    </div>
+</div>

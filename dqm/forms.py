@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, FileField
-from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, InputRequired
-from dqm.models import User
+from wtforms import StringField, PasswordField, SubmitField, FileField, SelectField
+from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, InputRequired, Required
+from dqm.models import User, MetaData
+from dqm.function import get_data_sources_name
 
 class RegisterForm(FlaskForm):
 
@@ -36,3 +37,8 @@ class FileUpload(FlaskForm):
 
 class NoAction(FlaskForm):
     submit = SubmitField(label="Törlés")
+
+class RemoveDataSet(FlaskForm):
+
+    select_data = SelectField(u'Field name', choices=get_data_sources_name(), validators=[Required()])
+    submit = SubmitField(label='Adatforrás eltávolítás')
