@@ -1,7 +1,8 @@
 from dqm import app
 from flask import render_template, redirect, url_for, flash, request
-from dqm.models import User, MetaData
-from dqm.forms import RegisterForm, LoginForm, FileBrowser, FileUpload, NoAction, RemoveDataSet
+from dqm.models import User, MetaData, TableData
+from dqm.forms import RegisterForm, LoginForm, FileBrowser, FileUpload, NoAction, RemoveDataSet, RemoveDuplication,\
+    SortDataSet
 from werkzeug.utils import secure_filename
 from dqm import db
 from flask_login import login_user, logout_user, login_required, current_user
@@ -18,12 +19,16 @@ def home_page():
 @login_required
 def dqm_page():
 
+    global df
     global df_stat
     global file_name
+
     form_browser = FileBrowser()
     form_upload = FileUpload()
     form_no_action = NoAction()
     remove_data_set = RemoveDataSet()
+    remove_duplication = RemoveDuplication()
+    sort_data_set = SortDataSet()
 
     if request.method == 'POST':
 
@@ -50,6 +55,8 @@ def dqm_page():
                                    form_upload=form_upload,
                                    form_no_action=form_no_action,
                                    remove_data_set=remove_data_set,
+                                   remove_duplication=remove_duplication,
+                                   sort_data_set=sort_data_set,
                                    data_sets=data_sets,
                                    eda=[df_stat.to_html(classes='table table-hover table-dark text-center',
                                                         header=True)])
@@ -60,6 +67,7 @@ def dqm_page():
             # create new db entity
             data_metaclass = MetaData(
                 name=form_upload.name.data,
+                physical_name=file_name,
                 column_num=df_stat.iloc[0, 1],
                 row_num=df_stat.iloc[1, 1],
                 unique_row_num=df_stat.iloc[2, 1],
@@ -73,12 +81,35 @@ def dqm_page():
             db.session.add(data_metaclass)
             db.session.commit()
 
+            # adding column name - column types in loop
+            for column in df:
+                if df.dtypes[column] in ['int16', 'int32', 'int64']:
+                    column_type = 'INT'
+                elif df.dtypes[column] in ['float16', 'float32', 'float64']:
+                    column_type = 'FLOAT'
+                elif df.dtypes[column]  == 'datetime64':
+                    column_type = 'DATE'
+                elif df.dtypes[column] == 'object':
+                    column_type = 'STRING'
+
+                # print(f'Column name: {column} - Column type: {column_type}')
+                data_tableclass = TableData(
+                    related_metadata_name=form_upload.name.data,
+                    column_name=column,
+                    column_type=column_type
+                )
+
+                db.session.add(data_tableclass)
+                db.session.commit()
+
             # Update info list and select drop down list
             data_sets = MetaData.query.all()
-            remove_data_set.select_data.choices = get_data_sources_name()
+            remove_data_set.select_removeable_dataset.choices = get_data_sources_name()
+            remove_duplication.select_duplication_dataset.choices = get_data_sources_name()
+            sort_data_set.select_dataset.choices = get_data_sources_name()
 
             # Move files to datas directory
-            print(type(file_name))
+            # print(type(file_name))
             # with file_name.read():
             #     df = pd.read_csv(file_name)
             #     df.to_csv(f'./datas/{form_upload.name.data}', index_col=False)
@@ -88,6 +119,8 @@ def dqm_page():
                                    form_upload=form_upload,
                                    form_no_action=form_no_action,
                                    remove_data_set=remove_data_set,
+                                   remove_duplication=remove_duplication,
+                                   sort_data_set=sort_data_set,
                                    data_sets=data_sets
                                    )
 
@@ -101,17 +134,19 @@ def dqm_page():
         if remove_data:
 
             # Select drop down element
-            element = request.form.get('select_data')
+            element = request.form.get('select_removeable_dataset')
 
             # query db record
             db_record = MetaData.query.filter_by(name=element).first()
 
-            # Delete element
+            # Delete elements
             db.session.delete(db_record)
             db.session.commit()
 
             # Update info list and select drop down list
-            remove_data_set.select_data.choices = get_data_sources_name()
+            remove_data_set.select_removeable_dataset.choices = get_data_sources_name()
+            remove_duplication.select_duplication_dataset.choices = get_data_sources_name()
+            sort_data_set.select_dataset.choices = get_data_sources_name()
             data_sets = MetaData.query.all()
 
             return render_template('dqm.html',
@@ -119,6 +154,98 @@ def dqm_page():
                                    form_upload=form_upload,
                                    form_no_action=form_no_action,
                                    remove_data_set=remove_data_set,
+                                   remove_duplication=remove_duplication,
+                                   sort_data_set=sort_data_set,
+                                   data_sets=data_sets
+                                   )
+
+        remove_duplication_form = request.form.get('remove_duplication')
+        if remove_duplication_form:
+
+            # Select drop down element
+            element = request.form.get('select_duplication_dataset')
+
+            # filter data - from MetaData class identify the correct class
+            selected_dataset = MetaData.query.filter_by(name=element).first().physical_name
+
+            # get path and file for reading and saving
+            path_and_file = '/'.join(['datas', selected_dataset])
+
+            # reading the dataframe
+            df = pd.read_csv(path_and_file, sep=";", encoding='utf-8-sig')
+
+            df = df.drop_duplicates()
+            df.to_csv(path_or_buf=path_and_file, index=False, encoding='utf-8-sig')
+
+            # get statistics from dataframe
+            df_stat = get_summary(df)
+
+            # update MetaData Class in db
+            data_metaclass = MetaData.query.filter_by(name=element).first()
+
+            data_metaclass.row_num = df_stat.iloc[1, 1]
+            data_metaclass.unique_row_num = df_stat.iloc[2, 1]
+            data_metaclass.unique_row_rate = df_stat.iloc[3, 1]
+            data_metaclass.filled_row_num = df_stat.iloc[4, 1]
+            data_metaclass.filled_row_rate = df_stat.iloc[5, 1]
+            data_metaclass.missing_row_num = df_stat.iloc[6, 1]
+            data_metaclass.missing_row_rate = df_stat.iloc[7, 1]
+
+            db.session.commit()
+
+            # getting datas
+            data_sets = MetaData.query.all()
+
+            return render_template('dqm.html',
+                                   form_browser=form_browser,
+                                   form_upload=form_upload,
+                                   form_no_action=form_no_action,
+                                   remove_data_set=remove_data_set,
+                                   remove_duplication=remove_duplication,
+                                   sort_data_set=sort_data_set,
+                                   data_sets=data_sets
+                                   )
+
+        sort_data_set_form =  request.form.get('sort_data_set')
+        if sort_data_set_form:
+
+            # Select drop down element
+            element = request.form.get('select_sort_dataset')
+            sort_by_col = request.form.get('col_name')
+            sort_mode = request.form.get('sort_mode')
+            sort_lst = []
+
+            # create 'by' variable for sort_values function
+            if ',' in sort_by_col:
+                for i in sort_by_col.split(','):
+                    sort_lst.append(i)
+            else:
+                sort_lst.append(sort_by_col)
+
+            # filter data - from MetaData class identify the correct class
+            selected_dataset = MetaData.query.filter_by(name=element).first().physical_name
+
+            # get path and file for reading and saving
+            path_and_file = '/'.join(['datas', selected_dataset])
+
+            # reading the dataframe
+            df = pd.read_csv(path_and_file, encoding='utf-8-sig')
+
+            # sort values
+            df.sort_values(by=sort_lst, inplace=True, ascending=True if sort_mode == 'Nővekvő' else False)
+
+            # save new dataset
+            df.to_csv(path_or_buf=path_and_file, index=False, encoding='utf-8-sig')
+
+            # getting datas
+            data_sets = MetaData.query.all()
+            return render_template('dqm.html',
+                                   form_browser=form_browser,
+                                   form_upload=form_upload,
+                                   form_no_action=form_no_action,
+                                   remove_data_set=remove_data_set,
+                                   remove_duplication=remove_duplication,
+                                   sort_data_set=sort_data_set,
                                    data_sets=data_sets
                                    )
 
@@ -130,6 +257,8 @@ def dqm_page():
                                        form_upload=form_upload,
                                        form_no_action=form_no_action,
                                        remove_data_set=remove_data_set,
+                                       remove_duplication=remove_duplication,
+                                       sort_data_set=sort_data_set,
                                        data_sets=data_sets
                                        )
 

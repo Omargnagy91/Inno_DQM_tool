@@ -40,5 +40,20 @@ class NoAction(FlaskForm):
 
 class RemoveDataSet(FlaskForm):
 
-    select_data = SelectField(u'Field name', choices=get_data_sources_name(), validators=[Required()])
+    select_removeable_dataset = SelectField(u'Field name', choices=get_data_sources_name(), validators=[Required()])
     submit = SubmitField(label='Adatforrás eltávolítás')
+
+class RemoveDuplication(FlaskForm):
+
+    select_duplication_dataset = SelectField(u'Field name', choices=get_data_sources_name(), validators=[Required()])
+    select_duplication_dataset_mode = SelectField(u'Field name', choices=['Első', 'Utolsó', '-'],
+                                                  validators=[Required()])
+    col_name = StringField(label="Oszlop neve - (üresen hagyva a teljes sor duplikáció kerül vizsgálatra")
+    submit = SubmitField(label='Duplikáció eltávolítás')
+
+class SortDataSet(FlaskForm):
+    select_sort_dataset = SelectField(u'Field name', choices=get_data_sources_name(), validators=[Required()])
+    col_name = StringField(label="Oszlop/Oszlopok neve, ami alapján a sorbarendezés megtörténik ")
+    sort_mode = SelectField(u'Field name', choices=['Csökkenő', 'Nővekvő'],
+                                                  validators=[Required()])
+    submit = SubmitField(label='Sorbarendezés elvégzése')

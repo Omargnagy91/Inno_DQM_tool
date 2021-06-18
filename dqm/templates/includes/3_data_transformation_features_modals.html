@@ -21,10 +21,100 @@
               Válassza ki, hogy melyik forrást szeretné törölni az adatbázisból!
             </h6>
             <br>
-            {{ remove_data_set.select_data(class="form-control")}}
+            {{ remove_data_set.select_removeable_dataset(class="form-control")}}
             <br>
             <input id="remove_data_set" name="remove_data_set" type="hidden" value="remove_data_set">
             {{ remove_data_set.submit(class="btn btn-outline-danger btn-block") }}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal-Remove-Duplication"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="col-12 modal-title text-center" id="ModalLabel2">
+            Duplikáció szűrés
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {{ remove_duplication.hidden_tag() }}
+            <h6 class="text-center">
+              Válassza ki a kívánt adatforrást!
+            </h6>
+            <br>
+            {{ remove_duplication.select_duplication_dataset(class="form-control")}}
+            <br>
+            <h6 class="text-center">
+              Mely értékeket kívánja meghagyni?
+            </h6>
+            <br>
+            {{ remove_duplication.select_duplication_dataset_mode(class="form-control")}}
+            <br>
+            <h6 class="text-center">
+              Mely oszlopra szeretné a duplikáció vizsgálatot elvégezni? Hagyja üresen, ha nincs kiválasztott oszlop!
+            </h6>
+            <br>
+            {{ remove_duplication.col_name(class="form-control")}}
+            <br>
+            <input id="remove_duplication" name="remove_duplication" type="hidden" value="remove_duplication">
+            {{ remove_duplication.submit(class="btn btn-outline-info btn-block") }}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal-Sort-Dataset"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="col-12 modal-title text-center" id="ModalLabel3">
+            Adatforrás sorbarendezés
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {{ sort_data_set.hidden_tag() }}
+            <h6 class="text-center">
+              Válassza ki a kívánt adatforrást!
+            </h6>
+            <br>
+            {{ sort_data_set.select_sort_dataset(class="form-control")}}
+            <br>
+            <h6 class="text-center">
+              Melyik oszlop/oszlopok alapján szeretné a sorbarendezést elvégezni? Sorolja fel őket ','-vel elválasztva és kezdje a legfontosabbal!
+            </h6>
+            <br>
+            {{ sort_data_set.col_name(class="form-control")}}
+            <br>
+            <h6 class="text-center">
+              Csökkenő vagy növekvő sorrend?
+            </h6>
+            <br>
+            {{ sort_data_set.sort_mode(class="form-control")}}
+            <br>
+            <input id="sort_data_set" name="sort_data_set" type="hidden" value="sort_data_set">
+            {{ sort_data_set.submit(class="btn btn-outline-info btn-block") }}
           </form>
         </div>
         <div class="modal-footer">

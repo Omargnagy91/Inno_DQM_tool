@@ -28,9 +28,12 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f'User  {self.username}'
 
+
 class MetaData(db.Model):
+
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(), unique=True, nullable=False)
+    physical_name = db.Column(db.String(), nullable=False)
     column_num = db.Column(db.Integer(), nullable=False)
     row_num = db.Column(db.Integer(), nullable=False)
     unique_row_num = db.Column(db.Integer(), nullable=False)
@@ -40,6 +43,19 @@ class MetaData(db.Model):
     missing_row_num = db.Column(db.Integer(), nullable=False)
     missing_row_rate = db.Column(db.String(), nullable=False)
 
+    table_datas = db.relationship('TableData', cascade="all,delete", backref='related_metadata', lazy=True)
+
     def __repr__(self):
         return f'{self.name}'
+
+class TableData(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    related_metadata_name = db.Column(db.String(), db.ForeignKey('meta_data.name'))
+    column_name = db.Column(db.String(), nullable=False)
+    column_type = db.Column(db.String(), nullable=False)
+
+    def __repr__(self):
+        return f'TableData - {self.related_metadata_name}'
+
+
 
