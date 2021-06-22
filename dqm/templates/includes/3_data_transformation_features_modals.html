@@ -126,3 +126,129 @@
       </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="Modal-Join-Datasets"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="col-12 modal-title text-center" id="ModalLabel4">
+            Adatforrások Összekapcsolása
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {{ join_data_sets.hidden_tag() }}
+            <div class="row">
+              <div class="col-6" style="border-right: 1px solid white; border-right, border-bottom: 2px solid white">
+                <h6 class="text-center">
+                  Válassza ki az első adatforrást!
+                </h6>
+                <br>
+                {{ join_data_sets.select_dataset_1(class="form-control")}}
+                <br>
+                <h6 class="text-center">
+                  Adja meg az első adatforráshoz tartozó kapcsoló oszlopot!
+                </h6>
+                <br>
+                {{ join_data_sets.join_col_name_dataset_1(class="form-control")}}
+              </div>
+              <div class="col-6" style="border-left: 1px solid white; border-right, border-bottom: 2px solid white">
+                <h6 class="text-center">
+                  Válassza ki a kapcsolható adatforrást!
+                </h6>
+                <br>
+                {{ join_data_sets.select_dataset_2(class="form-control")}}
+                <br>
+                <h6 class="text-center">
+                  Adja meg a összekötő második adatforrás kapcsoló oszlopát!
+                </h6>
+                <br>
+                {{ join_data_sets.join_col_name_dataset_2(class="form-control")}}
+              </div>
+            </div>
+            <br>
+            <hr style="background-color:white">
+            <div class="row">
+              <div class="col-12">
+                <h6 class="text-center">
+                  Definiálja a JOIN típusát az adatforrások között!
+                </h6>
+                <br>
+                {{ join_data_sets.join_mode(class="form-control")}}
+                <br>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <h6 class="text-center">
+                  Előállt új entitás azonosítója:
+                </h6>
+                {{ join_data_sets.new_dataset_name(class="form-control")}}
+              </div>
+              <div class="col-6">
+                <h6 class="text-center">
+                  Előállt új entitás fizikai neve: (.csv, .xlsx)
+                </h6>
+                {{ join_data_sets.new_dataset_physical_name(class="form-control")}}
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-12">
+                <input id="join_data_sets" name="join_data_sets" type="hidden" value="join_data_sets">
+                {{ join_data_sets.submit(class="btn btn-outline-info btn-block") }}
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Modal-Remove-Cells"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="col-12 modal-title text-center" id="ModalLabel5">
+            Adatforrás mező eltávolítás
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {{ remove_cells.hidden_tag() }}
+            <h6 class="text-center">
+              Válassza ki, hogy melyik forrás mezőjét szeretné törölni az adatbázisból!
+            </h6>
+            <br>
+            {{ remove_cells.select_dataset_remove_cells(class="form-control") }}
+            <br>
+            <h6 class="text-center">
+              Sorolja fel, hogy melyik forrás mezőt/mezőket szeretné törölni az adatbázisból ","-vel elválasztva!
+            </h6>
+            <br>
+            {{ remove_cells.select_removeable_cells(class="form-control") }}
+            <br>
+            <input id="remove_cells" name="remove_cells" type="hidden" value="remove_cells">
+            {{ remove_cells.submit(class="btn btn-outline-danger btn-block") }}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+</div>

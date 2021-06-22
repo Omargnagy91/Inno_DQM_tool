@@ -11,6 +11,19 @@ def get_data_sources_name():
 
     return sources_name
 
+# general func - get separator of csv file
+def get_separator(file_name: str):
+    with open('datas/' + file_name, "r", encoding="utf-8") as file:
+        line = file.readline()
+        if ',' in line:
+            delimiter = ','
+        elif ';' in line:
+            delimiter = ';'
+        else:
+            pass
+
+    return delimiter
+
 def get_datetime_cols(df:pd.DataFrame):
     df_time_cols = []
     for i in range(0, len(df.columns)):

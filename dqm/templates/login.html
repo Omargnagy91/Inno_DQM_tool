@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
     <body class="text-center">
-        <div class="container">
+        <div class="container" style="padding-top: 30px">
             <form method="POST" class="form-signing" style="color:white">
                 {{ form.hidden_tag() }}
                 <img class="mb-4" src="{{url_for('static', filename='img/logo-white.png')}}" alt="hifly" width="40%" height="40%">

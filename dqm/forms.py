@@ -57,3 +57,18 @@ class SortDataSet(FlaskForm):
     sort_mode = SelectField(u'Field name', choices=['Csökkenő', 'Nővekvő'],
                                                   validators=[Required()])
     submit = SubmitField(label='Sorbarendezés elvégzése')
+
+class JoinDataSets(FlaskForm):
+    select_dataset_1 = SelectField(u'Dataset 1 name', choices=get_data_sources_name(), validators=[Required()])
+    select_dataset_2 = SelectField(u'Dataset 2 name', choices=get_data_sources_name(), validators=[Required()])
+    join_col_name_dataset_1 = StringField(label="Első dataset join mezője", validators=[Required()])
+    join_col_name_dataset_2 = StringField(label="Első dataset join mezője", validators=[Required()])
+    join_mode = SelectField(u'Dataset 2 name', choices=['INNER', 'LEFT', 'RIGHT', 'OUTER'], validators=[Required()])
+    new_dataset_name = StringField(label="Új adatforrás db azonosítója", validators=[Required()])
+    new_dataset_physical_name = StringField(label="Új adatforrás fizikai neve", validators=[Required()])
+    submit = SubmitField(label='Összekapcsolás elvégzése')
+
+class RemoveCells(FlaskForm):
+    select_dataset_remove_cells = SelectField(u'Field name', choices=get_data_sources_name(), validators=[Required()])
+    select_removeable_cells = StringField(label="Törölhető mezők neve vesszővel elválasztva", validators=[Required()])
+    submit = SubmitField(label='Adatforrás eltávolítás')
