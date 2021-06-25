@@ -252,3 +252,55 @@
       </div>
     </div>
 </div>
+
+<div class="modal fade" id="Modal-Clean-Text"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="col-12 modal-title text-center" id="ModalLabel6">
+            Szöveges mező tisztítás
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {{ remove_cells.hidden_tag() }}
+            <h6 class="text-center">
+              Válassza ki az adatforrást!
+            </h6>
+            <br>
+            {{ clean_text.select_dataset_clean_text(class="form-control") }}
+            <br>
+            <h6 class="text-center">
+              Adja meg a tisztítandó mező nevét!
+            </h6>
+            <br>
+            {{ clean_text.select_clean_text(class="form-control") }}
+            <br>
+            <h6 class="text-center">
+              Adja meg az elválasztót, ami alapján szétbontásra kerül az előző mező!
+            </h6>
+            <br>
+            {{ clean_text.select_separator(class="form-control") }}
+            <br>
+            <h6 class="text-center">
+              Adja meg az új mezők nevét vesszővel (,) elválasztva
+            </h6>
+            <br>
+            {{ clean_text.new_columns(class="form-control") }}
+            <br>
+            <input id="clean_text" name="clean_text" type="hidden" value="clean_text">
+            {{ clean_text.submit(class="btn btn-outline-info btn-block") }}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+</div>
+

@@ -72,3 +72,10 @@ class RemoveCells(FlaskForm):
     select_dataset_remove_cells = SelectField(u'Field name', choices=get_data_sources_name(), validators=[Required()])
     select_removeable_cells = StringField(label="Törölhető mezők neve vesszővel elválasztva", validators=[Required()])
     submit = SubmitField(label='Adatforrás eltávolítás')
+
+class CleanText(FlaskForm):
+    select_dataset_clean_text = SelectField(u'Field name', choices=get_data_sources_name(), validators=[Required()])
+    select_clean_text = StringField(label="Mező név", validators=[Required()])
+    select_separator = StringField(label="Szeparátor", validators=[Required()])
+    new_columns = StringField(label="Új mezők neve vesszővel felsorolva", validators=[Required()])
+    submit = SubmitField(label='Szöveges mező tisztítás')

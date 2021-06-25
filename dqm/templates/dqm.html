@@ -26,12 +26,18 @@
     }
 
     .form-inline{
-    margin: 0 auto;
-    width:55%
+        margin: 0 auto;
+        width:55%
     }
 
     th {
         text-align:center
+    }
+
+    .custom-btn{
+        margin-bottom: 5px;
+        padding: 25px;
+        font-size: 18px
     }
 
     </style>
@@ -96,35 +102,35 @@
             <div class="content-right">
                <h4>3: Műveletek</h4>
                <div class="row" style="margin-right:20px">
-                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
+                    <button type="button" class="btn btn-outline-info btn-block custom-btn"
                             data-toggle="modal" data-target="#Modal-Join-Datasets">
                         Adatforrások összekapcsolása
                     </button>
-                   <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
+                   <button type="button" class="btn btn-outline-info btn-block custom-btn"
                             data-toggle="modal" data-target="#Modal-Sort-Dataset">
                         Adatforrás sorbarendezése
                     </button>
-                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
+                    <button type="button" class="btn btn-outline-info btn-block custom-btn"
                             data-toggle="modal" data-target="#Modal-Remove-Duplication">
                         Duplum szűrés
                     </button>
-                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
-                            data-toggle="modal" data-target="#">
-                        Szöveges mező transzformáció
-                    </button>
-                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
-                            data-toggle="modal" data-target="#">
-                        Dátum mező transzformáció
-                    </button>
-                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"
-                            data-toggle="modal" data-target="#">
+<!--                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"-->
+<!--                            data-toggle="modal" data-target="#">-->
+<!--                        Szöveges mező transzformáció-->
+<!--                    </button>-->
+<!--                    <button type="button" class="btn btn-outline-info btn-block" style="margin-bottom: 5px"-->
+<!--                            data-toggle="modal" data-target="#">-->
+<!--                        Dátum mező transzformáció-->
+<!--                    </button>-->
+                    <button type="button" class="btn btn-outline-info btn-block custom-btn"
+                            data-toggle="modal" data-target="#Modal-Clean-Text">
                         Szövegtisztítás
                     </button>
-                    <button type="button" class="btn btn-outline-danger btn-block" style="margin-bottom: 5px"
+                    <button type="button" class="btn btn-outline-danger btn-block custom-btn"
                             data-toggle="modal" data-target="#Modal-Remove-DataSet">
                         Adatforrás eltávolítás
                     </button>
-                    <button type="button" class="btn btn-outline-danger btn-block" style="margin-bottom: 5px"
+                    <button type="button" class="btn btn-outline-danger btn-block custom-btn"
                             data-toggle="modal" data-target="#Modal-Remove-Cells">
                         Adatforrás mező eltávolítás
                     </button>
