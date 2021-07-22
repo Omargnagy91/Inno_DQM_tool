@@ -63,7 +63,7 @@ class JoinDataSets(FlaskForm):
     select_dataset_2 = SelectField(u'Dataset 2 name', choices=get_data_sources_name(), validators=[Required()])
     join_col_name_dataset_1 = StringField(label="Első dataset join mezője", validators=[Required()])
     join_col_name_dataset_2 = StringField(label="Első dataset join mezője", validators=[Required()])
-    join_mode = SelectField(u'Dataset 2 name', choices=['INNER', 'LEFT', 'RIGHT', 'OUTER'], validators=[Required()])
+    join_mode = SelectField(u'Dataset 2 name', choices=['INNER', 'LEFT', 'RIGHT', 'OUTER', 'FUZZY'], validators=[Required()])
     new_dataset_name = StringField(label="Új adatforrás db azonosítója", validators=[Required()])
     new_dataset_physical_name = StringField(label="Új adatforrás fizikai neve", validators=[Required()])
     submit = SubmitField(label='Összekapcsolás elvégzése')
@@ -79,3 +79,8 @@ class CleanText(FlaskForm):
     select_separator = StringField(label="Szeparátor", validators=[Required()])
     new_columns = StringField(label="Új mezők neve vesszővel felsorolva", validators=[Required()])
     submit = SubmitField(label='Szöveges mező tisztítás')
+
+class MatchDataSets(FlaskForm):
+    select_dataset_match_1 = SelectField(u'Dataset 1 name', choices=get_data_sources_name(), validators=[Required()])
+    select_dataset_match_2 = SelectField(u'Dataset 2 name', choices=get_data_sources_name(), validators=[Required()])
+    submit = SubmitField(label='Összehasonlítás elvégzése')

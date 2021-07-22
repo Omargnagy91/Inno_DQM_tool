@@ -2,12 +2,12 @@ from dqm import app
 from flask import render_template, redirect, url_for, flash, request
 from dqm.models import User, MetaData, TableData
 from dqm.forms import RegisterForm, LoginForm, FileBrowser, FileUpload, NoAction, RemoveDataSet, RemoveDuplication,\
-    SortDataSet, JoinDataSets, RemoveCells, CleanText
+    SortDataSet, JoinDataSets, RemoveCells, CleanText, MatchDataSets
 from werkzeug.utils import secure_filename
 from dqm import db
 from flask_login import login_user, logout_user, login_required, current_user
 import pandas as pd
-from .function import get_summary, get_data_sources_name, get_separator
+from .function import get_summary, get_data_sources_name, get_separator, fuzzy_merge
 
 @app.route('/')
 @app.route('/home')
@@ -31,6 +31,7 @@ def dqm_page():
     join_data_sets = JoinDataSets()
     remove_cells = RemoveCells()
     clean_text = CleanText()
+    match_data_sets = MatchDataSets()
 
     if request.method == 'POST':
 
@@ -63,6 +64,7 @@ def dqm_page():
                                    join_data_sets=join_data_sets,
                                    remove_cells=remove_cells,
                                    clean_text=clean_text,
+                                   match_data_sets=match_data_sets,
                                    eda=[df_stat.to_html(classes='table table-hover table-dark text-center',
                                                         header=True)])
 
@@ -116,6 +118,8 @@ def dqm_page():
             join_data_sets.select_dataset_2.choices = get_data_sources_name()
             remove_cells.select_dataset_remove_cells.choices = get_data_sources_name()
             clean_text.select_dataset_clean_text.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_1.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_2.choices = get_data_sources_name()
 
             # Move files to datas directory
             # print(type(file_name))
@@ -133,7 +137,8 @@ def dqm_page():
                                    data_sets=data_sets,
                                    join_data_sets=join_data_sets,
                                    remove_cells=remove_cells,
-                                   clean_text=clean_text
+                                   clean_text=clean_text,
+                                   match_data_sets=match_data_sets
                                    )
 
         # feature - No action
@@ -163,6 +168,8 @@ def dqm_page():
             join_data_sets.select_dataset_2.choices = get_data_sources_name()
             remove_cells.select_dataset_remove_cells.choices = get_data_sources_name()
             clean_text.select_dataset_clean_text.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_1.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_2.choices = get_data_sources_name()
 
             data_sets = MetaData.query.all()
 
@@ -176,7 +183,8 @@ def dqm_page():
                                    data_sets=data_sets,
                                    join_data_sets=join_data_sets,
                                    remove_cells=remove_cells,
-                                   clean_text=clean_text
+                                   clean_text=clean_text,
+                                   match_data_sets=match_data_sets
                                    )
 
         # Feature - drop duplication
@@ -227,7 +235,8 @@ def dqm_page():
                                    data_sets=data_sets,
                                    join_data_sets=join_data_sets,
                                    remove_cells=remove_cells,
-                                   clean_text=clean_text
+                                   clean_text=clean_text,
+                                   match_data_sets=match_data_sets
                                    )
 
         # Feature - sort data set
@@ -274,7 +283,8 @@ def dqm_page():
                                    data_sets=data_sets,
                                    join_data_sets=join_data_sets,
                                    remove_cells=remove_cells,
-                                   clean_text=clean_text
+                                   clean_text=clean_text,
+                                   match_data_sets=match_data_sets
                                    )
 
         # Feature - join datasets
@@ -314,8 +324,14 @@ def dqm_page():
             elif join_mode == 'OUTER':
                 df = pd.merge(df_left, df_right, how='outer', left_on=join_col_name_dataset_1,
                               right_on=join_col_name_dataset_2)
+            elif join_mode == 'FUZZY':
+                df = fuzzy_merge(df_left, df_right, join_col_name_dataset_1, join_col_name_dataset_2, threshold=60)
 
             # get statistics of the examined dataframe
+            if df.empty:
+                print('A')
+                flash('Az adatforrásokat nem lehet összekapcsolni a megadott paraméterek alapján.',  category='danger')
+                return redirect(url_for('dqm_page'))
             df_stat = get_summary(df)
 
             # create new db entity
@@ -376,6 +392,8 @@ def dqm_page():
             join_data_sets.select_dataset_2.choices = get_data_sources_name()
             remove_cells.select_dataset_remove_cells.choices = get_data_sources_name()
             clean_text.select_dataset_clean_text.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_1.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_2.choices = get_data_sources_name()
 
             return render_template('dqm.html',
                                    form_browser=form_browser,
@@ -387,7 +405,8 @@ def dqm_page():
                                    data_sets=data_sets,
                                    join_data_sets=join_data_sets,
                                    remove_cells=remove_cells,
-                                   clean_text=clean_text
+                                   clean_text=clean_text,
+                                   match_data_sets=match_data_sets
                                    )
 
         # feature - remove cells
@@ -467,6 +486,8 @@ def dqm_page():
             join_data_sets.select_dataset_2.choices = get_data_sources_name()
             remove_cells.select_dataset_remove_cells.choices = get_data_sources_name()
             clean_text.select_dataset_clean_text.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_1.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_2.choices = get_data_sources_name()
 
             return render_template('dqm.html',
                                    form_browser=form_browser,
@@ -478,7 +499,8 @@ def dqm_page():
                                    data_sets=data_sets,
                                    join_data_sets=join_data_sets,
                                    remove_cells=remove_cells,
-                                   clean_text=clean_text
+                                   clean_text=clean_text,
+                                   match_data_sets=match_data_sets
                                    )
 
         # feature - clean text
@@ -563,7 +585,73 @@ def dqm_page():
                                    data_sets=data_sets,
                                    join_data_sets=join_data_sets,
                                    remove_cells=remove_cells,
-                                   clean_text=clean_text
+                                   clean_text=clean_text,
+                                   match_data_sets=match_data_sets
+                                   )
+
+        # feature - match datasets
+        match_data_sets_form = request.form.get('match_data_sets')
+        if match_data_sets_form:
+
+            match_dataset_1 = request.form.get('select_dataset_match_1')
+            match_dataset_2 = request.form.get('select_dataset_match_2')
+
+            # filter data - from MetaData class identify the correct rows
+            match_dataset_1_physical = MetaData.query.filter_by(name=match_dataset_1).first().physical_name
+            match_dataset_2_physical = MetaData.query.filter_by(name=match_dataset_2).first().physical_name
+
+            # get path and file for reading and saving
+            path_and_file_1 = '/'.join(['datas', match_dataset_1_physical])
+            path_and_file_2 = '/'.join(['datas', match_dataset_2_physical])
+
+            # reading the dataframe - these dataframes will construct as left and right side of the join
+            df_match_left = pd.read_csv(path_and_file_1, index_col=False, delimiter=get_separator(match_dataset_1_physical))
+            df_match_right = pd.read_csv(path_and_file_2, index_col=False, delimiter=get_separator(match_dataset_2_physical))
+
+            # concat
+            df = pd.concat([df_match_left, df_match_right])
+            df = df.reset_index(drop=True)
+
+            # grouping by the cols
+            df_gpby = df.groupby(list(df.columns))
+
+            # filter: only sort values which are presented once in the dataframe
+            idx = [x[0] for x in df_gpby.groups.values() if len(x) == 1]
+
+            # diff vals
+            df_diff = df.reindex(idx)
+
+            # count common/diff rows
+            common_rows_count = int((int(df.shape[0]) - int(df_diff.shape[0]))/2)
+            diff_rows_count = int(df_diff.shape[0])
+            # print(f'Common rows count: {common_rows_count}')
+
+            flash(f'{common_rows_count} megegyező és {diff_rows_count} különböző érték sor található a két adatforrás '
+                  f'összehasonlításánál', category='success')
+
+            data_sets = MetaData.query.all()
+            remove_data_set.select_removeable_dataset.choices = get_data_sources_name()
+            remove_duplication.select_duplication_dataset.choices = get_data_sources_name()
+            sort_data_set.select_sort_dataset.choices = get_data_sources_name()
+            join_data_sets.select_dataset_1.choices = get_data_sources_name()
+            join_data_sets.select_dataset_2.choices = get_data_sources_name()
+            remove_cells.select_dataset_remove_cells.choices = get_data_sources_name()
+            clean_text.select_dataset_clean_text.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_1.choices = get_data_sources_name()
+            match_data_sets.select_dataset_match_2.choices = get_data_sources_name()
+
+            return render_template('dqm.html',
+                                   form_browser=form_browser,
+                                   form_upload=form_upload,
+                                   form_no_action=form_no_action,
+                                   remove_data_set=remove_data_set,
+                                   remove_duplication=remove_duplication,
+                                   sort_data_set=sort_data_set,
+                                   data_sets=data_sets,
+                                   join_data_sets=join_data_sets,
+                                   remove_cells=remove_cells,
+                                   clean_text=clean_text,
+                                   match_data_sets=match_data_sets
                                    )
 
     if request.method == 'GET':
@@ -576,6 +664,8 @@ def dqm_page():
         join_data_sets.select_dataset_2.choices = get_data_sources_name()
         remove_cells.select_dataset_remove_cells.choices = get_data_sources_name()
         clean_text.select_dataset_clean_text.choices = get_data_sources_name()
+        match_data_sets.select_dataset_match_1.choices = get_data_sources_name()
+        match_data_sets.select_dataset_match_2.choices = get_data_sources_name()
 
         return render_template('dqm.html',
                                        form_browser=form_browser,
@@ -587,7 +677,8 @@ def dqm_page():
                                        data_sets=data_sets,
                                        join_data_sets=join_data_sets,
                                        remove_cells=remove_cells,
-                                       clean_text=clean_text
+                                       clean_text=clean_text,
+                                       match_data_sets=match_data_sets
                                        )
 
 

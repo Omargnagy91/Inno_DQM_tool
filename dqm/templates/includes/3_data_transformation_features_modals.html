@@ -127,7 +127,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="Modal-Join-Datasets"
      tabindex="-1"
      aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -304,3 +303,60 @@
     </div>
 </div>
 
+<div class="modal fade" id="Modal-Match-Datasets"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="col-12 modal-title text-center" id="ModalLabel4">
+            Adatforrások összehasonlítása
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {{ match_data_sets.hidden_tag() }}
+            <div class="row">
+              <div class="col-12">
+                <h6 class="text-center">
+                  Válassza ki az két összehasonlítandó adatforrást!
+                </h6>
+                <br>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6" style="border-right: 1px solid white; border-right, border-bottom: 2px solid white">
+                <h6 class="text-center">
+                  Válassza ki az első adatforrást!
+                </h6>
+                <br>
+                {{ match_data_sets.select_dataset_match_1(class="form-control")}}
+                <br>
+              </div>
+              <div class="col-6" style="border-left: 1px solid white; border-right, border-bottom: 2px solid white">
+                <h6 class="text-center">
+                  Válassza ki a második adatforrást!
+                </h6>
+                <br>
+                {{ match_data_sets.select_dataset_match_2(class="form-control")}}
+                <br>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-12">
+                <input id="match_data_sets" name="match_data_sets" type="hidden" value="match_data_sets">
+                {{ match_data_sets.submit(class="btn btn-outline-info btn-block") }}
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+</div>
